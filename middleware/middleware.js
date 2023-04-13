@@ -3,16 +3,19 @@ import cors from "cors";
 import StatusCodes from "http-status-codes";
 import admin from "../routes/adminRouter.js";
 import compression from "compression";
-
+import docs from "../api/swagger/swaggerOptions.js";
+import swaggerUI from "swagger-ui-express";
 
 // initialize express app
 const app = express();
 
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(compression({ level: 9, compress: true, threshold: 0 }));
+app
+	.use(express.json())
+	.use(express.urlencoded({ extended: true }))
+	.use(cors())
+	.use(compression({ level: 9, compress: true, threshold: 0 }))
+	.use("/api-docs", swaggerUI.serve, swaggerUI.setup(docs))
 
 
 

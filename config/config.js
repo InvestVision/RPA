@@ -9,6 +9,8 @@ const db_Name = process.env.db_serverName;
 const prod_host = process.env.prod_host;
 const prod_port = process.env.prod_db_port || 5000;
 const prod_Name = process.env.prod_serverName;
+const h_captcha = process.env.hcaptcha;
+const token = process.env.token;
 
 export const ap = {
     "server": {
@@ -33,3 +35,10 @@ export const production = {
         "dbName": prod_Name
     }
 }
+
+export const cred = {
+    captcha: {
+        "user": h_captcha,
+        "access": token,
+    }
+};
