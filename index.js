@@ -1,35 +1,37 @@
 import express from 'express';
-import compression from 'compression';
-import cors from 'cors';
 import path from 'path';
-import config from './config/config.js';
+import mongoose from 'mongoose';
+import { ap, mongo }  from './config/config.js';
+import all_Wares from "./middleware/middleware.js";
+import chalk from "chalk";
 
-
+// initialize express
 const app = express();
 
-app.use(express.json());
-app.use(compression({ level: 9, compress: true, threshold: 0 }));
+
+// initialize middleware
 app.use(express.static(path.join('public')));
-app.use(cors());
+app.use("/", all_Wares);
 
 
-app.get('/', (req, res) => {
-    try{
-        res.status(200).render('index.html')
-    } catch (err) {
-    res.send(err.message);
-    }
-});
 
-const Port = config.server.port;
-const host = config.server.host;
-const db_host = config.mongo.host;
-const db_Port = config.mongo.port;
-const db_dbName = config.mongo.dbName;
-
-
-app.listen(Port,() => {
-    console.log(`app listening on http://${host}:${Port}`)
-});
-
-console.log();
+// Connections to both database server and the App server
+mongoose
+	.connect(`${mongo.server.host+mongo.server.port}`, {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then(() => {
+		console.log(`Connected to MongoDB on address`, chalk.yellow`${mongo.server.host+mongo.server.port+mongo.server.dbName}`);
+		app.listen(ap.server.port, () =>
+			console.log(
+				"Server running on", chalk.blueBright`${ap.server.host+ap.server.port}`
+			)
+		);
+	})
+	.catch((error) =>
+		console.log(
+			"Please make sure Mongodb is installed and running on port: " +
+				error.hostname
+		)
+	);

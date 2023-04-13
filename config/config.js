@@ -1,19 +1,35 @@
 import dotenv from 'dotenv';
 dotenv.config()
 const localhost = process.env.Url;
-const localport = process.env.PORT;
+const localport = process.env.PORT || 4000;
 const dbName = process.env.serverName;
- const result = {
-        "server": {
-            "host": localhost,
-            "port": localport,
-            "dbName": dbName,
-        },
-        "mongo": {
-            "host": "mongodb://localhost:",
-            "port": 27017,
-            "dbName": "/Result-app"
-        }
- }
+const db_host = process.env.dbUrl;
+const db_port = process.env.dbPORT || 27017;
+const db_Name = process.env.db_serverName;
+const prod_host = process.env.prod_host;
+const prod_port = process.env.prod_db_port || 5000;
+const prod_Name = process.env.prod_serverName;
 
-export default result;
+export const ap = {
+    "server": {
+        "host": localhost,
+        "port": localport,
+        "dbName": dbName,
+    }
+}
+
+export const mongo = {
+    "server": {
+        "host": db_host,
+        "port": db_port,
+        "dbName": db_Name
+    }
+}
+        
+export const production = {
+    "server": {
+        "host": prod_host,
+        "port": prod_port,
+        "dbName": prod_Name
+    }
+}
